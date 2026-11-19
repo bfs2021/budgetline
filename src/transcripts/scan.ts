@@ -1,5 +1,6 @@
-import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
+import { writeAtomic } from '../fsutil.js';
 import { parseSession } from './parse.js';
 import type { Session } from './types.js';
 
@@ -107,7 +108,7 @@ export function loadSessions(opts: LoadOptions): Session[] {
     if (r.entry.session) sessions.push(r.entry.session);
   }
   changed ||= Object.keys(old).length !== Object.keys(next).length;
-  if (useCache && changed) writeFileSync(opts.cacheFile!, JSON.stringify({ version: CACHE_VERSION, entries: next }));
+  if (useCache && changed) writeAtomic(opts.cacheFile!, JSON.stringify({ version: CACHE_VERSION, entries: next }));
   sessions.sort((a, b) => (a.start < b.start ? -1 : 1));
   return sessions;
 }

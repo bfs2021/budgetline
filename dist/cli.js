@@ -534,7 +534,7 @@ var init_parse = __esm({
 });
 
 // src/transcripts/scan.ts
-import { existsSync as existsSync4, readdirSync, readFileSync as readFileSync3, statSync, writeFileSync as writeFileSync2 } from "node:fs";
+import { existsSync as existsSync4, readdirSync, readFileSync as readFileSync3, statSync } from "node:fs";
 import { basename, dirname, join as join2 } from "node:path";
 function listJsonl(dir) {
   if (!existsSync4(dir)) return [];
@@ -603,7 +603,7 @@ function loadSessions(opts) {
     if (r.entry.session) sessions.push(r.entry.session);
   }
   changed ||= Object.keys(old).length !== Object.keys(next).length;
-  if (useCache && changed) writeFileSync2(opts.cacheFile, JSON.stringify({ version: CACHE_VERSION, entries: next }));
+  if (useCache && changed) writeAtomic(opts.cacheFile, JSON.stringify({ version: CACHE_VERSION, entries: next }));
   sessions.sort((a, b) => a.start < b.start ? -1 : 1);
   return sessions;
 }
@@ -611,6 +611,7 @@ var CACHE_VERSION;
 var init_scan = __esm({
   "src/transcripts/scan.ts"() {
     "use strict";
+    init_fsutil();
     init_parse();
     CACHE_VERSION = 5;
   }
@@ -891,7 +892,7 @@ var init_incremental = __esm({
 });
 
 // src/config.ts
-import { existsSync as existsSync5, readFileSync as readFileSync5, rmSync as rmSync2, writeFileSync as writeFileSync3 } from "node:fs";
+import { existsSync as existsSync5, readFileSync as readFileSync5, rmSync as rmSync2, writeFileSync as writeFileSync2 } from "node:fs";
 import { join as join5 } from "node:path";
 function readJson(file) {
   try {
@@ -909,7 +910,7 @@ function migrate(dir) {
   if (typeof old.enabled === "boolean" && !("hookEnabled" in cur)) moved.hookEnabled = old.enabled;
   if (Number(old.threshold) > 0 && !("hookThreshold" in cur)) moved.hookThreshold = Number(old.threshold);
   try {
-    writeFileSync3(configFile(dir), JSON.stringify({ ...cur, ...moved }, null, 2));
+    writeFileSync2(configFile(dir), JSON.stringify({ ...cur, ...moved }, null, 2));
     rmSync2(legacyHookFile(dir), { force: true });
   } catch {
   }
@@ -924,7 +925,7 @@ function readConfig(dir) {
   return { ...DEFAULTS, ...stored(dir) };
 }
 function writeConfig(dir, patch) {
-  writeFileSync3(configFile(dir), JSON.stringify({ ...stored(dir), ...patch }, null, 2));
+  writeFileSync2(configFile(dir), JSON.stringify({ ...stored(dir), ...patch }, null, 2));
 }
 function warnTokens(c) {
   const w = c.sessionWarnTokens;
@@ -950,7 +951,7 @@ var init_config = __esm({
 });
 
 // src/guard-state.ts
-import { readFileSync as readFileSync6, writeFileSync as writeFileSync4 } from "node:fs";
+import { readFileSync as readFileSync6, writeFileSync as writeFileSync3 } from "node:fs";
 import { join as join6 } from "node:path";
 function freshState() {
   return { offset: 0, lastKey: "", eq: 0, context: 0, warned: { budget: false, context: false } };
@@ -964,7 +965,7 @@ function readState(dir, session) {
 }
 function writeState(dir, session, s) {
   privateDir(join6(dir, "guard"));
-  writeFileSync4(stateFile(dir, session), JSON.stringify(s));
+  writeFileSync3(stateFile(dir, session), JSON.stringify(s));
 }
 function applyLine(s, o) {
   if (o?.type !== "assistant" || o.isSidechain || !o.message?.usage || o.message.model === "<synthetic>") return;
@@ -1167,7 +1168,7 @@ var init_guard = __esm({
 });
 
 // src/limits-log.ts
-import { appendFileSync as appendFileSync2, closeSync as closeSync2, existsSync as existsSync6, fstatSync as fstatSync2, openSync as openSync2, readFileSync as readFileSync7, readSync as readSync2, writeFileSync as writeFileSync5 } from "node:fs";
+import { appendFileSync as appendFileSync2, closeSync as closeSync2, existsSync as existsSync6, fstatSync as fstatSync2, openSync as openSync2, readFileSync as readFileSync7, readSync as readSync2, writeFileSync as writeFileSync4 } from "node:fs";
 function readRange(file, from, bytes) {
   const fd = openSync2(file, "r");
   try {
@@ -1195,7 +1196,7 @@ function prune(file, now) {
   const cutoff = now.getTime() - KEEP_DAYS * DAY_MS;
   if (!first || Date.parse(first.ts) >= cutoff - DAY_MS) return;
   const kept = parseJsonl(readFileSync7(file, "utf8")).filter((s) => Date.parse(s.ts) >= cutoff);
-  writeFileSync5(file, kept.map((s) => JSON.stringify(s) + "\n").join(""));
+  writeFileSync4(file, kept.map((s) => JSON.stringify(s) + "\n").join(""));
 }
 function logSample(file, sample, now = /* @__PURE__ */ new Date()) {
   if (existsSync6(file)) {
