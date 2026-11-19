@@ -1,0 +1,54 @@
+{
+  "name": "budgetline",
+  "version": "0.3.0",
+  "description": "See where your Claude Code budget goes — and stop hitting your limits.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "budgetline": "dist/cli.js"
+  },
+  "files": [
+    "dist/cli.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nibforge/budgetline.git"
+  },
+  "homepage": "https://github.com/nibforge/budgetline#readme",
+  "bugs": {
+    "url": "https://github.com/nibforge/budgetline/issues"
+  },
+  "keywords": [
+    "claude-code",
+    "claude",
+    "tokens",
+    "usage",
+    "budget",
+    "statusline",
+    "cost"
+  ],
+  "scripts": {
+    "build": "esbuild src/cli.ts --bundle --platform=node --target=node20 --format=esm --outfile=dist/cli.js --log-level=warning",
+    "prebuild": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "test": "vitest --run",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run lint && npm run typecheck && npm test && npm run build && node scripts/check-dist.mjs",
+    "db:generate": "node -e \"console.log('no database')\"",
+    "db:migrate": "node -e \"console.log('no database')\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@types/node": "^22.20.5",
+    "esbuild": "^0.28.2",
+    "eslint": "^9.39.5",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.73.0",
+    "vitest": "^3.2.7"
+  }
+}

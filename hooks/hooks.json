@@ -1,0 +1,37 @@
+{
+  "description": "budgetline: optional prompt notes and session/context guard, in one process per event. Both do nothing until enabled (`budgetline hook enable`, `budgetline guard enable`). Never block.",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/dist/cli.js",
+              "events",
+              "run"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolBatch": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/dist/cli.js",
+              "events",
+              "run"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

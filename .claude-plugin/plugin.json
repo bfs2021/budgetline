@@ -1,0 +1,10 @@
+{
+  "name": "budgetline",
+  "version": "0.3.0",
+  "description": "See where your Claude Code budget goes — and stop hitting your limits.",
+  "author": { "name": "budgetline contributors" },
+  "homepage": "https://github.com/nibforge/budgetline",
+  "repository": "https://github.com/nibforge/budgetline",
+  "license": "MIT",
+  "keywords": ["usage", "cost", "tokens", "estimate", "budget"]
+}

@@ -1,0 +1,12 @@
+# Local files that never go to the repo.
+.env
+*.pem
+*.key
+build/
+.next/
+coverage/
+*.tsbuildinfo
+*.db
+node_modules/
+
+/demo/

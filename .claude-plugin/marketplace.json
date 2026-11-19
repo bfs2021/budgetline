@@ -1,0 +1,17 @@
+{
+  "name": "budgetline",
+  "owner": {
+    "name": "budgetline contributors"
+  },
+  "plugins": [
+    {
+      "name": "budgetline",
+      "source": "./",
+      "version": "0.3.0",
+      "description": "See where your Claude Code budget goes — and stop hitting your limits."
+    }
+  ],
+  "metadata": {
+    "description": "budgetline: see where your Claude Code budget goes — and stop hitting your limits."
+  }
+}
